@@ -1,0 +1,22 @@
+digraph "algebreLineaire" {
+
+splines  = ortho;
+fontname = "Inconsolata";
+
+node [colorscheme = ylgnbu4];
+edge [colorscheme = dark28, dir = both];
+
+Canonique       [shape = record, label = "{ Canonique | + Canonique() : \l|+ valeur(Vector, Vector) : double\l }"];
+Functions       [shape = record, label = "{ Functions | + Functions() : \l|+ sousDet(Matrice) : double\l + inverse(Matrice) : Matrice\l + det(Matrice) : double\l + Comatrice(Matrice) : Matrice\l + multiplier(Matrice, Matrice) : Matrice\l + getMatriceLigneCol(Matrice, int, int) : Matrice\l }"];
+Main            [shape = record, label = "{ Main | + Main() : \l|+ main(String[]) : void\l }"];
+Matrice         [shape = record, label = "{ Matrice | + Matrice(int) : \l + Matrice(double[][]) : \l + Matrice(int, int) : \l|+ estInversible() : boolean\l + transposee() : Matrice\l + setValue(int, int, double) : void\l + getLigne(int) : double[]\l + afficheLigne(int) : String\l + toString() : String\l + get(int, int) : double\l + mul(double) : Matrice\l| hauteur : int\l  largeur : int\l }"];
+ProduitScalaire [shape = record, label = "{ ProduitScalaire | + ProduitScalaire() : \l|+ valeur(Vector, Vector) : double\l }"];
+Ratio           [shape = record, label = "{ Ratio | ~ Ratio(int) : \l ~ Ratio() : \l ~ Ratio(int, int) : \l|+ toString() : String\l| positif : boolean\l  num : int\l  denom : int\l }"];
+RatioTest       [shape = record, label = "{ RatioTest | + RatioTest() : \l|+ testConstructeurVide() : void\l + testConstructeurSimple() : void\l }"];
+Useful          [shape = record, label = "{ Useful | + Useful() : \l|+ signe(int) : int\l + pgcd(int, int) : int\l + estNul(double) : boolean\l + ppcm(int, int) : int\l + simplifier(int, int) : int[]\l }"];
+Vector          [shape = record, label = "{ Vector | + Vector(ArrayList\<Double\>) : \l|+ toString() : String\l + multiply(Double, Vector) : Vector\l + index(int) : Double\l + sum(Vector, Vector) : Vector\l + sub(Vector, Vector) : Vector\l }"];
+test1           [shape = record, label = "{ test1 | + test1() : \l|+ main(String[]) : void\l }"];
+
+Canonique       -> ProduitScalaire [color = "#000082", style = solid , arrowtail = none    , arrowhead = normal  , taillabel = "", label = "", headlabel = ""];
+
+}
