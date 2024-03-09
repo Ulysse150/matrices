@@ -39,15 +39,15 @@ pour des matrices contenant des nombres rééls.
 ## Objectifs :
 
 ### Matrices et rationnels
--[x] Implémentation de nombres rationnels
--[x] Implémenatation de matrices de nombres réels
--[x] Calcul d'inverse de matrice de nombre réels
--[ ] Implémentation de matrices rationelles
--[ ] Résolution de systèmes linéaires
+- [x] Implémentation de nombres rationnels
+- [x] Implémenatation de matrices de nombres réels
+- [x] Calcul d'inverse de matrice de nombre réels
+- [ ] Implémentation de matrices rationelles
+- [ ] Résolution de systèmes linéaires
 
 ### Calcul vectoriel
--[ ] Création de familles, bases
--[ ] Procédé d'orthonormalisation de base
+- [ ] Création de familles, bases
+- [ ] Procédé d'orthonormalisation de base
 
 ### Interface graphique
--[x] Réussir à créer une fenêtre
+- [x] Réussir à créer une fenêtre
