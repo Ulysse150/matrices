@@ -5,9 +5,9 @@ import java.lang.Math;
 public class Ratio extends Nombre  {
     //Ses variables
     //positive est un booleen
-    private int num;
-    private int denom;
-    private boolean signed;
+    final private int num;
+    final private int denom;
+    final private boolean signed;
 
     @Override
     public boolean equals(Object obj) {
@@ -53,39 +53,10 @@ public class Ratio extends Nombre  {
 
 
 
-    public Ratio neg(Ratio Q){
-        Ratio R = new Ratio(Q.num, Q.denom, !Q.signed);
-        return this.add(R);
-    }
 
-    public Ratio neg(int q){
-        return this.add(new Ratio(-q));
-    }
 
-    public Ratio mul(Ratio Q){
-        if (this.isNull() || Q.isNull()){
-            return new Ratio();
-        }else{
-        return new Ratio(Q.num * this.num, Q.denom * this.denom, Q.signed ^this.signed);}
-    }
 
-    public Ratio mul(int q){
-        if (q == 0){
-            return new Ratio();
-        }else{
-        return this.mul(new Ratio(q, 1));}
-    }
 
-    public Ratio inv(){
-        if (this.num == 0){
-            throw new ArithmeticException("On ne peut calculer l'inverse de zero");
-        }
-        return new Ratio(this.denom, this.num, this.signed);
-    }
-
-    public Ratio div(Ratio Q){
-        return this.mul(Q.inv());
-    }
 
 
     public int getNum(){
@@ -106,6 +77,11 @@ public class Ratio extends Nombre  {
     }
 
     @Override
+    NomEntier type() {
+        return NomEntier.rationnel;
+    }
+
+    @Override
     public String toString(){
         if (this.num == 0){
             return "0";
@@ -117,7 +93,7 @@ public class Ratio extends Nombre  {
                 s = "";
             }
             if (this.denom == 1){ //si c'est un nombre entier
-                return s + String.valueOf(this.num);
+                return s +this.num;
                 }
             else{
                 return s + this.num + "/" + this.denom;
@@ -127,71 +103,90 @@ public class Ratio extends Nombre  {
 
     }
 
-    @Override
-    Nombre add(Nombre N) {
-        if (Q instanceof  Ratio){
-            if (this.num == 0){
-                return Q;
+    public Ratio addRatio(Ratio Q){
+
+        if (this.num == 0){
+            return Q;
+        }else{
+            if (Q.num == 0){
+                return this;
             }else{
-                if (Q.num == 0){
-                    return this;
-                }else{
-                    int D = Useful.ppcm(this.denom, Q.denom);
-                    //System.out.println(D);
+                int D = Useful.ppcm(this.denom, Q.denom);
+                //System.out.println(D);
 
-                    int m1 = D / this.denom;//le nombre par lequel on multipliera la fraction de gauche
-                    int m2 = D / Q.denom; // le nombre par lequel on multipliera la fraction de droite
+                int m1 = D / this.denom;//le nombre par lequel on multipliera la fraction de gauche
+                int m2 = D / Q.denom; // le nombre par lequel on multipliera la fraction de droite
 
-                    int q1 = this.num * m1;
-                    int q2 = Q.num * m2;
+                int q1 = this.num * m1;
+                int q2 = Q.num * m2;
 
-                    if (this.signed == Q.signed){ // si ils sont de meme signe alors on garde le meme signe
-                        // et on les additionne
-                        return new Ratio(q1 + q2, D, this.signed);
-                    }else{ // si ils sont de signes différents
-                        // c est le plus gros qui l'emporte
-                        if (q1 > q2){
-                            return new Ratio(q1 - q2, D, this.signed);
+                if (this.signed == Q.signed){ // si ils sont de meme signe alors on garde le meme signe
+                    // et on les additionne
+                    return new Ratio(q1 + q2, D, this.signed);
+                }else{ // si ils sont de signes différents
+                    // c est le plus gros qui l'emporte
+                    if (q1 > q2){
+                        return new Ratio(q1 - q2, D, this.signed);
+                    }else{
+                        if (q1 < q2){
+                            return new Ratio(q2 - q1, D, Q.signed);
                         }else{
-                            if (q1 < q2){
-                                return new Ratio(q2 - q1, D, Q.signed);
-                            }else{
-                                return new Ratio();
-                            }
-
+                            return new Ratio();
                         }
 
                     }
+
                 }
-            }}else{
-            throw new ArithmeticException("Peut aditionner Ratio que avec Ratio");
+            }
         }
     }
 
 
-
     @Override
-    Nombre mul(Nombre N) {
-        this.CheckIsSameClass(N);
-        return new Ratio(1);
+    Nombre add(Nombre Q) {
+        
+        return switch (Q.type()){
+            case rationnel -> this.addRatio((Ratio) Q);
+            case entier -> this.addRatio(new Ratio(((Entier) Q).value));
+            case reel -> throw new ArithmeticException("Un rationnel ne peut aditionner qu'un rationnel ou un entier.");
+        };
     }
 
     @Override
     Nombre neg(Nombre N) {
-        return null;
+        Nombre Q = N.oppose();
+        return this.add(Q);
     }
 
+    Ratio mulRatio(Ratio Q){
+        if (this.isNull() || Q.isNull()){
+            return new Ratio();
+        }else{
+            return new Ratio(Q.num * this.num, Q.denom * this.denom, Q.signed ^this.signed);}
+    }
 
+    @Override
+    Nombre mul(Nombre N) {
+        return switch (N.type()){
+            case rationnel -> this.mulRatio((Ratio) N);
+            case entier -> this.mulRatio(new Ratio(((Entier) N).value));
+            case reel -> throw new ArithmeticException("multiplication entre double et rationnel interdits");
+        };
+    }
+
+    @Override
+    Nombre inv() {
+
+        if (this.num == 0){
+            throw new ArithmeticException("On ne peut calculer l'inverse de zero");
+        }
+        return new Ratio(this.denom, this.num, this.signed);
+    }
 
     @Override
     Nombre div(Nombre N) {
-        this.CheckIsSameClass(N);
-        return null;
+        return this.mul(this.inv());
     }
 
-    @Override
-    Nombre inv(Nombre N) {
-        this.CheckIsSameClass(N);
-        return null;
-    }
+
 }

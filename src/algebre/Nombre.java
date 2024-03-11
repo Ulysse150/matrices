@@ -1,6 +1,14 @@
 package algebre;
 
+enum NomEntier{
+    rationnel,
+    entier,
+    reel,
+}
+
+
 public abstract class Nombre {
+
 
 
     abstract Nombre mul(Nombre N);
@@ -11,9 +19,13 @@ public abstract class Nombre {
 
     abstract Nombre div(Nombre N);
 
-    abstract Nombre inv(Nombre N);
+    abstract Nombre inv();
 
     abstract Nombre oppose();
+
+    abstract NomEntier type();
+
+
 
     public boolean IsSameClass(Nombre N){
         //Checks if is same instance
@@ -33,4 +45,66 @@ public abstract class Nombre {
         }
     }
 
+    abstract boolean isNull();
+
+
+
 }
+
+class Entier extends Nombre{
+    int value;
+
+    Entier(int v){
+        this.value = v;
+    }
+
+    @Override
+    NomEntier type(){
+        return NomEntier.entier;
+    }
+
+    @Override
+    Nombre mul(Nombre N) {
+        return null;
+    }
+
+    @Override
+    Nombre neg(Nombre N) {
+        return null;
+    }
+
+    @Override
+    Nombre add(Nombre N) {
+        return null;
+    }
+
+    @Override
+    Nombre div(Nombre N) {
+        return null;
+    }
+
+    @Override
+    Nombre inv() {
+        return null;
+    }
+
+    @Override
+    Nombre oppose() {
+        return null;
+    }
+
+    @Override
+    boolean isNull() {
+        return this.value == 0;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(this.value);
+    }
+
+
+
+
+}
+
