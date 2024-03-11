@@ -2,7 +2,7 @@ package algebre;
 import java.lang.Math;
 
 
-public class Ratio {
+public class Ratio extends Nombre  {
     //Ses variables
     //positive est un booleen
     private int num;
@@ -46,56 +46,11 @@ public class Ratio {
         this.signed = s;
     }
 
-    public Ratio add(Ratio Q){
-        if (Q instanceof  Ratio){
-            if (this.num == 0){
-                return Q;
-            }else{
-                if (Q.num == 0){
-                    return this;
-                }else{
-                    int D = Useful.ppcm(this.denom, Q.denom);
-                    //System.out.println(D);
-
-                    int m1 = D / this.denom;//le nombre par lequel on multipliera la fraction de gauche
-                    int m2 = D / Q.denom; // le nombre par lequel on multipliera la fraction de droite
-
-                    int q1 = this.num * m1;
-                    int q2 = Q.num * m2;
-
-                    if (this.signed == Q.signed){ // si ils sont de meme signe alors on garde le meme signe
-                                    // et on les additionne
-                        return new Ratio(q1 + q2, D, this.signed);
-                    }else{ // si ils sont de signes différents
-                        // c est le plus gros qui l'emporte
-                        if (q1 > q2){
-                            return new Ratio(q1 - q2, D, this.signed);
-                        }else{
-                            if (q1 < q2){
-                                return new Ratio(q2 - q1, D, Q.signed);
-                            }else{
-                                return new Ratio();
-                            }
-
-                        }
-
-                    }
-
-
-
-
-                }
-        }}else{
-            throw new ArithmeticException("Peut multiplier Ratio que avec Ratio");
-        }
-    }
     public boolean isNull(){
         return this.num == 0;
     }
 
-    public Ratio add(int v){
-        return this.add(new Ratio(v));
-    }
+
 
 
     public Ratio neg(Ratio Q){
@@ -132,11 +87,6 @@ public class Ratio {
         return this.mul(Q.inv());
     }
 
-    public  Ratio div(int q){
-        return this.mul(new Ratio(1, q).inv());
-    }
-
-
 
     public int getNum(){
         return this.num;
@@ -148,6 +98,11 @@ public class Ratio {
 
     public boolean getPositif(){
         return this.signed;
+    }
+
+    @Override
+    public Nombre oppose(){
+        return new Ratio(this.num, this.denom,!this.signed);
     }
 
     @Override
@@ -172,7 +127,71 @@ public class Ratio {
 
     }
 
+    @Override
+    Nombre add(Nombre N) {
+        if (Q instanceof  Ratio){
+            if (this.num == 0){
+                return Q;
+            }else{
+                if (Q.num == 0){
+                    return this;
+                }else{
+                    int D = Useful.ppcm(this.denom, Q.denom);
+                    //System.out.println(D);
+
+                    int m1 = D / this.denom;//le nombre par lequel on multipliera la fraction de gauche
+                    int m2 = D / Q.denom; // le nombre par lequel on multipliera la fraction de droite
+
+                    int q1 = this.num * m1;
+                    int q2 = Q.num * m2;
+
+                    if (this.signed == Q.signed){ // si ils sont de meme signe alors on garde le meme signe
+                        // et on les additionne
+                        return new Ratio(q1 + q2, D, this.signed);
+                    }else{ // si ils sont de signes différents
+                        // c est le plus gros qui l'emporte
+                        if (q1 > q2){
+                            return new Ratio(q1 - q2, D, this.signed);
+                        }else{
+                            if (q1 < q2){
+                                return new Ratio(q2 - q1, D, Q.signed);
+                            }else{
+                                return new Ratio();
+                            }
+
+                        }
+
+                    }
+                }
+            }}else{
+            throw new ArithmeticException("Peut aditionner Ratio que avec Ratio");
+        }
+    }
 
 
 
+    @Override
+    Nombre mul(Nombre N) {
+        this.CheckIsSameClass(N);
+        return new Ratio(1);
+    }
+
+    @Override
+    Nombre neg(Nombre N) {
+        return null;
+    }
+
+
+
+    @Override
+    Nombre div(Nombre N) {
+        this.CheckIsSameClass(N);
+        return null;
+    }
+
+    @Override
+    Nombre inv(Nombre N) {
+        this.CheckIsSameClass(N);
+        return null;
+    }
 }

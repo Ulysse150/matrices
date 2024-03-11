@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        /*
         double[][]  array1 = {{1,2,3}, { 4, 5, 6}};
 
         double[][] array2 = {{1,6},{-1,7},{0,8}};
@@ -75,7 +76,7 @@ public class Main {
 
         Matrice df = new Matrice(D3);
         System.out.println(Functions.inverse(df));
-
+        */
 
 
 
