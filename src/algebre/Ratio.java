@@ -174,8 +174,10 @@ public class Ratio extends Nombre  {
 
     @Override
     Nombre div(Nombre N) {
-        return this.mul(this.inv());
+        return switch (N.type()) {
+            case rationnel -> this.mulRatio((Ratio) (N.inv()));
+            case reel -> throw new ArithmeticException("division entre double et rationnel interdits");
+        };
     }
-
 
 }

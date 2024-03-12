@@ -105,6 +105,11 @@ class Reel extends Nombre{
     boolean isNull() {
         return this.value <= 1e-8;
     }
+
+    @Override
+    public String toString(){
+        return String.valueOf(this.value);
+    }
 }
 
 
