@@ -20,7 +20,7 @@ public class Ratio extends Nombre  {
 
     //Les constructeurs
     Ratio(int a, int b){
-        this.signed = ( a < 0)  ^( b < 0);
+        this.signed = ( a < 0)  ^ ( b < 0);
         int[] v = Useful.simplifier(Math.abs(a), Math.abs(b));
         this.num = v[0];
         this.denom = v[1];
@@ -49,15 +49,6 @@ public class Ratio extends Nombre  {
     public boolean isNull(){
         return this.num == 0;
     }
-
-
-
-
-
-
-
-
-
 
     public int getNum(){
         return this.num;
@@ -147,8 +138,7 @@ public class Ratio extends Nombre  {
         
         return switch (Q.type()){
             case rationnel -> this.addRatio((Ratio) Q);
-            case entier -> this.addRatio(new Ratio(((Entier) Q).value));
-            case reel -> throw new ArithmeticException("Un rationnel ne peut aditionner qu'un rationnel ou un entier.");
+            case reel -> throw new ArithmeticException("Un rationnel peut pas aditionner double");
         };
     }
 
@@ -169,7 +159,6 @@ public class Ratio extends Nombre  {
     Nombre mul(Nombre N) {
         return switch (N.type()){
             case rationnel -> this.mulRatio((Ratio) N);
-            case entier -> this.mulRatio(new Ratio(((Entier) N).value));
             case reel -> throw new ArithmeticException("multiplication entre double et rationnel interdits");
         };
     }

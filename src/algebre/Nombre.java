@@ -2,13 +2,11 @@ package algebre;
 
 enum NomEntier{
     rationnel,
-    entier,
     reel,
 }
 
 
 public abstract class Nombre {
-
 
 
     abstract Nombre mul(Nombre N);
@@ -26,20 +24,19 @@ public abstract class Nombre {
     abstract NomEntier type();
 
 
-
-    public boolean IsSameClass(Nombre N){
+    public boolean IsSameClass(Nombre N) {
         //Checks if is same instance
-        if (this instanceof Ratio){
+        if (this instanceof Ratio) {
             return N instanceof Ratio;
-        }else{
+        } else {
             //TODO: à coder la verification pour les autres types
             return true;
         }
     }
 
-    public void CheckIsSameClass(Nombre N){
-        if (!(this.IsSameClass(N))){
-            if (this instanceof Ratio){
+    public void CheckIsSameClass(Nombre N) {
+        if (!(this.IsSameClass(N))) {
+            if (this instanceof Ratio) {
                 throw new ArithmeticException("N doit etre un rationnel.");
             }
         }
@@ -47,64 +44,67 @@ public abstract class Nombre {
 
     abstract boolean isNull();
 
-
-
 }
 
-class Entier extends Nombre{
-    int value;
-
-    Entier(int v){
+class Reel extends Nombre{
+    double value;
+    Reel(double v){
         this.value = v;
     }
 
     @Override
-    NomEntier type(){
-        return NomEntier.entier;
-    }
-
-    @Override
     Nombre mul(Nombre N) {
-        return null;
+        return switch (N.type()){
+            case rationnel -> throw new ArithmeticException("multiplication entre double et rationnel interdits");
+            case reel -> new Reel(this.value * ((Reel)N).value);
+        };
     }
 
     @Override
     Nombre neg(Nombre N) {
-        return null;
+        return switch (N.type()){
+            case rationnel -> throw new ArithmeticException("Un rationnel peut pas soustraire double");
+            case reel -> new Reel((this.value) - ((Reel)N).value);
+        };
     }
 
     @Override
     Nombre add(Nombre N) {
-        return null;
+        return switch (N.type()){
+            case rationnel -> throw new ArithmeticException("Un rationnel peut pas additionner double");
+            case reel -> new Reel((this.value) + ((Reel)N).value);
+        };
     }
 
-    @Override
-    Nombre div(Nombre N) {
-        return null;
-    }
+
 
     @Override
     Nombre inv() {
-        return null;
+        if (this.isNull()){
+            throw new ArithmeticException("On ne peut pas calculer l'inverse d'un nombre nul");
+        }else{
+            return new Reel(1 / this.value);
+        }
+    }
+    @Override
+    Nombre div(Nombre N) {
+        return this.mul(N.inv());
     }
 
     @Override
     Nombre oppose() {
-        return null;
+        return new Reel(-1*this.value);
+    }
+
+    @Override
+    NomEntier type() {
+        return NomEntier.reel;
     }
 
     @Override
     boolean isNull() {
-        return this.value == 0;
+        return this.value <= 1e-8;
     }
-
-    @Override
-    public String toString(){
-        return String.valueOf(this.value);
-    }
-
-
-
-
 }
+
 
